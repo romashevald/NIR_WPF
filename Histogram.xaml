@@ -5,47 +5,44 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LiveCharts.Geared;assembly=LiveCharts.Geared"
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
-        xmlns:d3="http://research.microsoft.com/DynamicDataDisplay/1.0"
         mc:Ignorable="d"  
         d:DesignHeight="700" d:DesignWidth="834"
          WindowState="Maximized" >
-
-    <Grid ShowGridLines="True" Margin="0,0,-936,-669">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="25*"/>
-            <ColumnDefinition Width="288*"/>
-            <ColumnDefinition Width="315*"/>
-            <ColumnDefinition Width="253*"/>
-        </Grid.ColumnDefinitions>
-        <Menu Height="25" VerticalAlignment="Top" Grid.ColumnSpan="4">
-            <MenuItem Header="File" >
-                <MenuItem Header="Прямая" Click="LineClick"></MenuItem>
-                <Separator />
-                <MenuItem Header="Выход" Click="ExitProject" ></MenuItem>
-            </MenuItem>
-        </Menu>
-        <InkCanvas Grid.Column="1" x:Name="inkCanvas" Margin="10,10,0,0"
+   
+        <Grid ShowGridLines="True" Margin="0,0,-936,-669">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="313*"/>
+                <ColumnDefinition Width="568*"/>
+            </Grid.ColumnDefinitions>
+            <Menu Height="25" VerticalAlignment="Top" Grid.ColumnSpan="2">
+                <MenuItem Header="File" >
+                    <MenuItem Header="Прямая" Click="LineClick"></MenuItem>
+                    <Separator />
+                    <MenuItem Header="Выход" Click="ExitProject" ></MenuItem>
+                </MenuItem>
+            </Menu>
+            <InkCanvas x:Name="inkCanvas" Top="10" Left="10"
                    EditingMode="None" 
                    ClipToBounds="True"
+                   Margin="10,40,30,778" 
                    MouseMove="inkCanvas_MouseMove" 
-                   MouseUp="inkCanvas_MouseUp"
                    MoveEnabled="True"
                    PreviewMouseDown="inkCanvas_MouseDown" 
-                   PreviewMouseUp="inkCanvas_MouseUp">
-            <Image x:Name="testImage" Stretch="Uniform" />
-        </InkCanvas>
+                   PreviewMouseUp="inkCanvas_MouseUp" >
+                <Image x:Name="testImage" Stretch="Uniform" />
+            </InkCanvas>
+       
+        <lvc:CartesianChart Series="{Binding SeriesCollection}" LegendLocation="Right" Margin="66,30,947,1121" Grid.Column="1" >
+                <lvc:CartesianChart.AxisY>
+                    <lvc:Axis Title="Sales" LabelFormatter="{Binding YFormatter}"/>
+                </lvc:CartesianChart.AxisY>
+                <lvc:CartesianChart.AxisX>
+                    <lvc:Axis Title="Month" Labels="{Binding Labels}"/>
+                </lvc:CartesianChart.AxisX>
+            </lvc:CartesianChart>
+ 
+        </Grid>
 
-        <d3:ChartPlotter Grid.Column="2" x:Name="Plotter">
-            <d3:LineGraph />
-        </d3:ChartPlotter>
 
-        <!--<lvc:CartesianChart Series="{Binding SeriesCollection}" LegendLocation="Right" Margin="66,30,947,1121" Grid.Column="1" >
-            <lvc:CartesianChart.AxisY>
-                <lvc:Axis Title="Sales" LabelFormatter="{Binding YFormatter}"/>
-            </lvc:CartesianChart.AxisY>
-            <lvc:CartesianChart.AxisX>
-                <lvc:Axis Title="Month" Labels="{Binding Labels}"/>
-            </lvc:CartesianChart.AxisX>
-        </lvc:CartesianChart>-->
-    </Grid>
+   
 </Window>
