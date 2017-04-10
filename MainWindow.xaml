@@ -22,14 +22,11 @@
             </MenuItem>
             <MenuItem Header="Histogram" Click="GetWindowHistogram"></MenuItem>
         </Menu>
-      
-           
-                <InkCanvas x:Name="inkCanvas" 
+        <InkCanvas x:Name="inkCanvas" 
                    EditingMode="Ink" 
-                   ClipToBounds="True" Height="445" >
-                    <Image x:Name="testImage" Stretch="Uniform"/>
-                </InkCanvas>
-           
+                   ClipToBounds="True" Height="300" Width="auto" >
+            <Image x:Name="testImage" Stretch="Uniform"/>
+        </InkCanvas>
     </Grid>
 </Window>
     
