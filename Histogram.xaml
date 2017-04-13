@@ -10,42 +10,43 @@
         d:DesignHeight="700" d:DesignWidth="834"
          WindowState="Maximized" >
 
-    <Grid ShowGridLines="True" Margin="0,0,-936,-669">
+    <Grid ShowGridLines="True" >
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="25*"/>
-            <ColumnDefinition Width="288*"/>
-            <ColumnDefinition Width="315*"/>
-            <ColumnDefinition Width="253*"/>
+            <ColumnDefinition Width="0*"/>
+            <ColumnDefinition Width="247*"/>
+            <ColumnDefinition Width="0*"/>
+            <ColumnDefinition Width="166*"/>
         </Grid.ColumnDefinitions>
         <Menu Height="25" VerticalAlignment="Top" Grid.ColumnSpan="4">
             <MenuItem Header="File" >
                 <MenuItem Header="Прямая" Click="LineClick"></MenuItem>
+                <MenuItem Header="Очистить область" Click="СlearThis"></MenuItem>
+                <MenuItem Header="Сохранить область как.." Click="SaveClick"></MenuItem>
+                <MenuItem Header="Сохранить гистограмму как.." Click="SaveHistClick"></MenuItem>
+
                 <Separator />
                 <MenuItem Header="Выход" Click="ExitProject" ></MenuItem>
             </MenuItem>
         </Menu>
-        <InkCanvas Grid.Column="1" x:Name="inkCanvas" Margin="10,10,0,0"
+        <InkCanvas x:Name="inkCanvas" Margin="0,25,0,0"
                    EditingMode="None" 
                    ClipToBounds="True"
                    MouseMove="inkCanvas_MouseMove" 
                    MouseUp="inkCanvas_MouseUp"
                    MoveEnabled="True"
                    PreviewMouseDown="inkCanvas_MouseDown" 
-                   PreviewMouseUp="inkCanvas_MouseUp">
+                   PreviewMouseUp="inkCanvas_MouseUp" Grid.Column="1">
             <Image x:Name="testImage" Stretch="Uniform" />
         </InkCanvas>
 
-        <d3:ChartPlotter Grid.Column="2" x:Name="Plotter">
-            <d3:LineGraph />
+        <d3:ChartPlotter Grid.Column="3"  x:Name="Plotter" Margin="0,30,10,70" >
+            <d3:HorizontalAxisTitle>Координата Х</d3:HorizontalAxisTitle>
+            <d3:VerticalAxisTitle>Цвет</d3:VerticalAxisTitle>
+            
+
+            <d3:LineGraph  />
         </d3:ChartPlotter>
 
-        <!--<lvc:CartesianChart Series="{Binding SeriesCollection}" LegendLocation="Right" Margin="66,30,947,1121" Grid.Column="1" >
-            <lvc:CartesianChart.AxisY>
-                <lvc:Axis Title="Sales" LabelFormatter="{Binding YFormatter}"/>
-            </lvc:CartesianChart.AxisY>
-            <lvc:CartesianChart.AxisX>
-                <lvc:Axis Title="Month" Labels="{Binding Labels}"/>
-            </lvc:CartesianChart.AxisX>
-        </lvc:CartesianChart>-->
+        
     </Grid>
 </Window>

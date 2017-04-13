@@ -18,6 +18,7 @@ using Microsoft.Research.DynamicDataDisplay;
 using Microsoft.Research.DynamicDataDisplay.DataSources;
 using System.Collections.ObjectModel;
 
+
 namespace NIR_WPF
 {
     /// <summary>
@@ -33,13 +34,18 @@ namespace NIR_WPF
         private List<PixelLine> _blueChannelLines = new List<PixelLine>();
         private List<PixelLine> _greenChannelLines = new List<PixelLine>();
 
-        enum btnChanged { nothing, btnLine, btnRect };
+        enum btnChanged
+        {
+            nothing,
+            btnLine
+        };
 
         Point pN, pK;
         bool isMove = false;
         btnChanged btn = btnChanged.nothing;
 
         private BitmapImage _image;
+
         public BitmapImage Image
         {
             get { return _image; }
@@ -89,7 +95,8 @@ namespace NIR_WPF
                 {
                     if (DrawingFigure)
                     {
-                        inkCanvas_MouseUp(sender, new MouseButtonEventArgs(e.MouseDevice, e.Timestamp, MouseButton.Left));
+                        inkCanvas_MouseUp(sender,
+                            new MouseButtonEventArgs(e.MouseDevice, e.Timestamp, MouseButton.Left));
                         DrawingFigure = false;
                     }
                 }
@@ -108,7 +115,7 @@ namespace NIR_WPF
                 PixelLine pixelBlueChannelLine = new PixelLine(line, _imageReader.BlueChannel);
                 PixelLine pixelGreenChannelLine = new PixelLine(line, _imageReader.GreenChannel);
 
-                _redChannelData.AddMany(pixelRedChannelLine.GetLine().Select(x => new Point(x.X, x.Value)));//todo
+                _redChannelData.AddMany(pixelRedChannelLine.GetLine().Select(x => new Point(x.X, x.Value))); //todo
 
                 _redChannelLines.Add(pixelRedChannelLine);
                 _blueChannelLines.Add(pixelRedChannelLine);
@@ -135,8 +142,7 @@ namespace NIR_WPF
                     inkCanvas.Children.Add(line);
                     AddLineToCollection(line);
                 }
-                else
-                    if (inkCanvas.Children.Count > 2 && !isMove)
+                else if (inkCanvas.Children.Count > 2 && !isMove)
                 {
                     inkCanvas.Children.RemoveAt(inkCanvas.Children.Count - 1);
                     inkCanvas.Children.Add(line);
@@ -147,7 +153,7 @@ namespace NIR_WPF
                     isMove = false;
                 }
             }
-            catch(Exception ee)
+            catch (Exception ee)
             {
                 Console.WriteLine("{0} DrawLine", ee);
             }
@@ -157,20 +163,20 @@ namespace NIR_WPF
         {
             try
             {
-                if(_redChannelData?.Count > 0) _redChannelData.Clear();///
+                if (_redChannelData?.Count > 0) _redChannelData.Clear(); ///
                 pN = new Point(e.GetPosition(e.Device.Target).X, e.GetPosition(e.Device.Target).Y);
                 Console.WriteLine(String.Format("Mouse Down Event at {0}", e.GetPosition(e.Device.Target)));
                 Console.WriteLine(Mouse.GetPosition(inkCanvas));
             }
-           
-                 catch (Exception ee)
+
+            catch (Exception ee)
             {
                 Console.WriteLine("{0} inkCanvas_MouseDown.", ee);
             }
-        
+
         }
 
-        private void inkCanvas_MouseUp(object sender, MouseButtonEventArgs e)//todo: fix
+        private void inkCanvas_MouseUp(object sender, MouseButtonEventArgs e) //todo: fix
         {
             try
             {
@@ -183,7 +189,7 @@ namespace NIR_WPF
                     isMove = true;
                 }
             }
-            catch(Exception ee)
+            catch (Exception ee)
             {
                 Console.WriteLine("{0} inkCanvas_MouseUp.", ee);
             }
@@ -194,10 +200,28 @@ namespace NIR_WPF
             Close();
         }
 
+        private void СlearThis(object sender, RoutedEventArgs e)
+        {
+            inkCanvas.Strokes.Clear();
+        }
+
+        private void SaveClick(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void SaveHistClick(object sender, RoutedEventArgs e)
+        {
+
+        }
+
         private void LineClick(object sender, RoutedEventArgs e)
         {
             btn = btnChanged.btnLine;
         }
-    }
 
+
+
+
+    }
 }

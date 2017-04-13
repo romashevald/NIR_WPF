@@ -24,7 +24,7 @@
         </Menu>
         <InkCanvas x:Name="inkCanvas" 
                    EditingMode="Ink" 
-                   ClipToBounds="True" Height="300" Width="auto" >
+                   ClipToBounds="True" Width="auto" Margin="10,30,0,10" >
             <Image x:Name="testImage" Stretch="Uniform"/>
         </InkCanvas>
     </Grid>

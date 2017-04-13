@@ -18,8 +18,7 @@ using System.Drawing;
 using System.IO;
 using System.Data;
 using System.Runtime.InteropServices;
-using LiveCharts;
-using LiveCharts.Geared;
+
 
 
 
