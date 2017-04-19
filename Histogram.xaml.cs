@@ -12,12 +12,10 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using LiveCharts;
-using LiveCharts.Geared;
-using LiveCharts.Wpf;
 using Microsoft.Research.DynamicDataDisplay;
 using Microsoft.Research.DynamicDataDisplay.DataSources;
 using System.Collections.ObjectModel;
-
+using System.IO;
 
 namespace NIR_WPF
 {
@@ -163,7 +161,7 @@ namespace NIR_WPF
         {
             try
             {
-                if (_redChannelData?.Count > 0) _redChannelData.Clear(); ///
+                if (_redChannelData?.Count > 0) _redChannelData.Clear();
                 pN = new Point(e.GetPosition(e.Device.Target).X, e.GetPosition(e.Device.Target).Y);
                 Console.WriteLine(String.Format("Mouse Down Event at {0}", e.GetPosition(e.Device.Target)));
                 Console.WriteLine(Mouse.GetPosition(inkCanvas));
@@ -202,26 +200,58 @@ namespace NIR_WPF
 
         private void СlearThis(object sender, RoutedEventArgs e)
         {
-            inkCanvas.Strokes.Clear();
+
+            this.inkCanvas.Strokes.Clear();
+
         }
+
 
         private void SaveClick(object sender, RoutedEventArgs e)
         {
-
+            Console.WriteLine(e);
+            int marg = int.Parse(this.inkCanvas.Margin.Left.ToString());
+            RenderTargetBitmap renderTargetBitmap =
+                new RenderTargetBitmap((int)this.inkCanvas.ActualWidth - marg,
+                    (int)this.inkCanvas.ActualHeight - marg, 0, 0, PixelFormats.Pbgra32);
+            renderTargetBitmap.Render(this.inkCanvas);
+            PngBitmapEncoder pngImage = new PngBitmapEncoder();
+            pngImage.Frames.Add(BitmapFrame.Create(renderTargetBitmap));
+            using (Stream fileStream = File.Create(@"D:\test.bmp"))
+            {
+                pngImage.Save(fileStream);
+            }
         }
 
         private void SaveHistClick(object sender, RoutedEventArgs e)
         {
+            try
+            {
+                RenderTargetBitmap renderTargetBitmap =
+                    new RenderTargetBitmap((int)this.Plotter.Width, (int)this.Plotter.Height, 0, 0, PixelFormats.Pbgra32);
+                renderTargetBitmap.Render(this.Plotter);
+                PngBitmapEncoder pngImage = new PngBitmapEncoder();
+                pngImage.Frames.Add(BitmapFrame.Create(renderTargetBitmap));
+                using (Stream fileStream = File.Create(@"D:\test1.bmp"))
+                {
+                    pngImage.Save(fileStream);
+                }
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception);
+            }
 
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            this.inkCanvas.Strokes.Clear();
         }
 
         private void LineClick(object sender, RoutedEventArgs e)
         {
             btn = btnChanged.btnLine;
         }
-
-
-
 
     }
 }
