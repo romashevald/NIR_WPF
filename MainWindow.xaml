@@ -21,6 +21,8 @@
 
             </MenuItem>
             <MenuItem Header="Histogram" Click="GetWindowHistogram"></MenuItem>
+            <MenuItem Header="KvaziLine" Click="GetWindowKvaziLine"></MenuItem>
+
         </Menu>
         <InkCanvas x:Name="inkCanvas" 
                    EditingMode="Ink" 

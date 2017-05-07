@@ -1,0 +1,32 @@
+﻿<Window x:Class="NIR_WPF.KvaziLine"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NIR_WPF"
+        mc:Ignorable="d"
+        Title="KvaziLine" Height="335" Width="373"
+         WindowState="Maximized" >
+    <Grid>
+        <Menu Height="25" VerticalAlignment="Top" Margin="0,0,0,410">
+            <MenuItem Header="Actions" >
+                <MenuItem Header="Перо" Click="DrawClick"></MenuItem>
+                <MenuItem Header="Ластик" Click="EraseClick"></MenuItem>
+            </MenuItem>
+        </Menu>
+        <InkCanvas x:Name="inkCanvas" 
+                   EditingMode="Ink" 
+                   ClipToBounds="True"
+                   Width="auto" 
+                   Margin="10,25,5,10"
+                   RenderTransformOrigin="0.469,0.356" 
+                   
+                   MouseMove="inkCanvas_MouseMove" 
+                   MouseUp="inkCanvas_MouseUp"
+                   MoveEnabled="True"
+                   PreviewMouseDown="inkCanvas_MouseDown" 
+                   PreviewMouseUp="inkCanvas_MouseUp" Grid.Column="1">
+            <Image x:Name="testImage" Stretch="Uniform"/>
+        </InkCanvas>
+    </Grid>
+</Window>
