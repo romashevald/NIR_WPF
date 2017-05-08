@@ -26,7 +26,7 @@ namespace NIR_WPF
         Point pN, pK;
         private ImageReader _imageReader;
         private BitmapImage _image;
-        int _countPoints = 0;
+        private List<Point> points = new List<Point>();
 
         //  private List<PointF> _helperPoints = new List<PointF>();
 
@@ -67,8 +67,15 @@ namespace NIR_WPF
         {
             try
             {
-                pN = new Point(e.GetPosition(e.Device.Target).X, e.GetPosition(e.Device.Target).Y);
-                _countPoints++;
+                if (points.Count < 3)
+                {
+                    points.Add(new Point(e.GetPosition(e.Device.Target).X, e.GetPosition(e.Device.Target).Y));
+                }
+                if (points.Count == 3)
+                {
+                    Console.WriteLine("All points have been set. Calc..");
+                    Console.WriteLine(points);
+                }
             }
 
             catch (Exception ee)

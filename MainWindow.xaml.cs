@@ -15,11 +15,13 @@ namespace NIR_WPF
     /// </summary>
     public partial class MainWindow : Window
     {
+        private static Logger LOG = Logger.GetInstance(typeof(MainWindow));
         private BitmapImage _image;
 
 
         public MainWindow()
         {
+            LOG.Info("components initialization");
             InitializeComponent();
         }
 
@@ -74,6 +76,7 @@ namespace NIR_WPF
 
         private void DrawClick(object sender, RoutedEventArgs e)
         {
+            LOG.Info("Draw Click Called");
             inkCanvas.DefaultDrawingAttributes.Color = Colors.Red;
         }
 
