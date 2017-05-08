@@ -29,7 +29,7 @@ namespace NIR_WPF
 
             float[] result = solve(matrix, vector);
 
-            Console.WriteLine("Center coords are: " + String.Join(",", result));
+            Console.WriteLine("Center coords are: " + String.Join(";", result));
 
             float x0 = result[0]; //система уравнений
             float y0 = result[1];
