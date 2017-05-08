@@ -6,8 +6,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Collections.Generic;
-
-
 namespace NIR_WPF
 {
     /// <summary>
@@ -23,10 +21,9 @@ namespace NIR_WPF
 
         btnChanged btn = btnChanged.nothing;
 
-        Point pN, pK;
         private ImageReader _imageReader;
         private BitmapImage _image;
-        private List<Point> points = new List<Point>();
+        private List<System.Drawing.PointF> points = new List<System.Drawing.PointF>();
 
         //  private List<PointF> _helperPoints = new List<PointF>();
 
@@ -65,16 +62,18 @@ namespace NIR_WPF
 
         private void inkCanvas_MouseDown(object sender, MouseButtonEventArgs e) //1
         {
+
             try
             {
                 if (points.Count < 3)
                 {
-                    points.Add(new Point(e.GetPosition(e.Device.Target).X, e.GetPosition(e.Device.Target).Y));
+                    points.Add(new System.Drawing.PointF((float)e.GetPosition(e.Device.Target).X, (float)e.GetPosition(e.Device.Target).Y));
                 }
                 if (points.Count == 3)
                 {
                     Console.WriteLine("All points have been set. Calc..");
                     Console.WriteLine(points);
+                    KvaziTools.GetParams(points);
                 }
             }
 

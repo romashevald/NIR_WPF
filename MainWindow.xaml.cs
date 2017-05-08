@@ -22,6 +22,7 @@ namespace NIR_WPF
         public MainWindow()
         {
             LOG.Info("components initialization");
+            Console.WriteLine(String.Join(",", KvaziTools.solve(new float[,] { { 2, -1}, {2, 1 } }, new float[] {0, 4})));
             InitializeComponent();
         }
 

@@ -7,18 +7,32 @@ namespace NIR_WPF
 {
     public abstract class KvaziTools
     {
-        public static KvaziParams GetParams(List<Point> points)
+        public static KvaziParams GetParams(List<PointF> points)
         {
             return GetParams(points[0], points[1], points[2]);
         }
 
         public static KvaziParams GetParams(PointF A, PointF B, PointF C)
         {
-            var d = new PointF((A.X + B.X) / 2f, (A.Y + B.Y) / 2f);
-            var f = new PointF((C.X + B.X) / 2f, (C.Y + B.Y) / 2f);
+            Console.WriteLine("{0}, {1}, {2}", A, B, C);
+            var D = new PointF((A.X + B.X) / 2f, (A.Y + B.Y) / 2f);
+            var E = new PointF((C.X + B.X) / 2f, (C.Y + B.Y) / 2f);
+            float[,] matrix = new float[,]
+            {
+                {B.X - A.X, B.Y - A.Y}, {C.X - B.X, C.Y - B.Y}
+            };
 
-            float x0 = 0; //система уравнений
-            float y0 = 0;
+            float[] vector = new float[]
+            {
+                A.X * (B.X - A.X) + D.Y * (B.Y - A.Y), B.Y*(C.Y-B.Y)+E.X*(C.X-B.X)
+            };
+
+            float[] result = solve(matrix, vector);
+
+            Console.WriteLine("Center coords are: " + String.Join(",", result));
+
+            float x0 = result[0]; //система уравнений
+            float y0 = result[1];
 
 
             var O = new PointF(x0, y0);
@@ -26,15 +40,16 @@ namespace NIR_WPF
             return new KvaziParams(O, GetLengthLine(A, O), GetLengthLine(B, O), GetLengthLine(C, O));
         }
 
-        private static double GetLengthLine(PointF first, PointF second)
+       
+        public static float GetLengthLine(PointF first, PointF second)
         {
-            return Math.Sqrt(Math.Pow(first.X - second.X, 2) + Math.Pow(first.Y - second.Y, 2));
+            return (float)Math.Sqrt((first.X - second.X) * (first.X - second.X) + (first.Y - second.Y) * (first.Y - second.Y));
         }
 
-        private static double[] solve(double[,] matrix, double[] vector)
+        public static float[] solve(float[,] matrix, float[] vector)
         {
-            var A = Matrix<double>.Build.DenseOfArray(matrix);
-            var B = Vector<double>.Build.Dense(vector);
+            var A = Matrix<float>.Build.DenseOfArray(matrix);
+            var B = Vector<float>.Build.Dense(vector);
             return A.Solve(B).AsArray();
         }
     }

@@ -6,16 +6,17 @@ namespace NIR_WPF
     {
         public PointF CircleCentr { get; private set; }
 
-        public double RadiusA { get; private set; }
-        public double RadiusB { get; private set; }
-        public double RadiusC { get; private set; }
+        public float RadiusA { get; private set; }
+        public float RadiusB { get; private set; }
+        public float RadiusC { get; private set; }
 
-        public KvaziParams(float centrX, float centrY, double radiusA, double radiusB, double radiusC)
+        
+        public KvaziParams(float centrX, float centrY, float radiusA, float radiusB, float radiusC)
             : this(new PointF(centrX, centrY), radiusA, radiusB, radiusC)
         {
         }
 
-        public KvaziParams(PointF centr, double radiusA, double radiusB, double radiusC)
+        public KvaziParams(PointF centr, float radiusA, float radiusB, float radiusC)
         {
             CircleCentr = centr;
             RadiusA = radiusA;
