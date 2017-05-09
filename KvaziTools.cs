@@ -17,6 +17,7 @@ namespace NIR_WPF
             Console.WriteLine("{0}, {1}, {2}", A, B, C);
             var D = new PointF((A.X + B.X) / 2f, (A.Y + B.Y) / 2f);
             var E = new PointF((C.X + B.X) / 2f, (C.Y + B.Y) / 2f);
+
             float[,] matrix = new float[,]
             {
                 {B.X - A.X, B.Y - A.Y}, {C.X - B.X, C.Y - B.Y}
@@ -24,20 +25,23 @@ namespace NIR_WPF
 
             float[] vector = new float[]
             {
-                A.X * (B.X - A.X) + D.Y * (B.Y - A.Y), B.Y*(C.Y-B.Y)+E.X*(C.X-B.X)
+                D.X * (B.X - A.X) + D.Y * (B.Y - A.Y),
+                E.Y*(C.Y-B.Y)+E.X*(C.X-B.X)
             };
 
             float[] result = solve(matrix, vector);
-
-            Console.WriteLine("Center coords are: " + String.Join(";", result));
-
+            
             float x0 = result[0]; //система уравнений
             float y0 = result[1];
-
-
+            
             var O = new PointF(x0, y0);
 
-            return new KvaziParams(O, GetLengthLine(A, O), GetLengthLine(B, O), GetLengthLine(C, O));
+            Console.WriteLine("Center coords are: " + String.Join(";", result));
+            Console.WriteLine("Radius A B C: {0} ; {1} ; {2} " , GetLengthLine(A, O), GetLengthLine(B,O), GetLengthLine(C, O));
+            KvaziParams kvaziParams = new KvaziParams(O, GetLengthLine(A, O), GetLengthLine(B, O), GetLengthLine(C, O));
+            kvaziParams.D = D;
+            kvaziParams.E = E;
+            return kvaziParams;
         }
 
        

@@ -19,17 +19,17 @@
         </Grid.ColumnDefinitions>
         <Menu Height="25" VerticalAlignment="Top" Grid.ColumnSpan="4">
             <MenuItem Header="File" >
+                <MenuItem Header="Загрузить снимок" Click="LoadPhoto" ></MenuItem>
                 <MenuItem Header="Прямая" Click="LineClick"></MenuItem>
                 <MenuItem Header="Очистить область" Click="СlearThis"></MenuItem>
                 <MenuItem Header="Сохранить область как.." Click="SaveClick"></MenuItem>
-
                 <MenuItem Header="Сохранить гистограмму" Click="SaveHistClick"></MenuItem>
+                <MenuItem Header="Сохранить данные" Click="SavDataClick"></MenuItem>
 
                 <Separator />
                 <MenuItem Header="Выход" Click="ExitProject" ></MenuItem>
             </MenuItem>
         </Menu>
-        <Button Content="Очистить" Click="Button_Click"  HorizontalAlignment="Left"  VerticalAlignment="Top" Width="75" Grid.ColumnSpan="2" Margin="97,0,0,0" />
         <InkCanvas x:Name="inkCanvas" Margin="0,25,0,0"
                    EditingMode="None" 
                    ClipToBounds="True"

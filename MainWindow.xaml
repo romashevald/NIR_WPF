@@ -1,8 +1,8 @@
 ﻿<Window x:Class="NIR_WPF.MainWindow" x:Name="myWind"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="NIR" 
-         WindowState="Maximized">
+        Title="NIR" WindowState="Maximized">
+    
     <Grid>
         <Menu Height="25" VerticalAlignment="Top" Margin="0,0,0,410">
             <MenuItem Header="File" >
@@ -11,18 +11,15 @@
                 <Separator />
                 <MenuItem Header="Выход" Click="ExitProject" ></MenuItem>
             </MenuItem>
-            <MenuItem Header="Actions" >
+            <MenuItem Header="Actions">
                 <MenuItem Header="Выделение области" Click="SelectionAreaClick" ></MenuItem>
-
                 <MenuItem Header="Перо" Click="DrawClick"></MenuItem>
                 <MenuItem Header="Ластик" Click="EraseClick"></MenuItem>
                 <MenuItem Header="Очистить" Click="ClearClick"></MenuItem>
                 <MenuItem Header="Вычислить" Click="AreaClick"></MenuItem>
-
             </MenuItem>
             <MenuItem Header="Histogram" Click="GetWindowHistogram"></MenuItem>
             <MenuItem Header="KvaziLine" Click="GetWindowKvaziLine"></MenuItem>
-
         </Menu>
         <InkCanvas x:Name="inkCanvas" 
                    EditingMode="Ink" 

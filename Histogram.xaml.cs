@@ -16,6 +16,9 @@ using Microsoft.Research.DynamicDataDisplay;
 using Microsoft.Research.DynamicDataDisplay.DataSources;
 using System.Collections.ObjectModel;
 using System.IO;
+using Microsoft.Win32;
+
+
 
 namespace NIR_WPF
 {
@@ -31,6 +34,8 @@ namespace NIR_WPF
         private List<PixelLine> _redChannelLines = new List<PixelLine>();
         private List<PixelLine> _blueChannelLines = new List<PixelLine>();
         private List<PixelLine> _greenChannelLines = new List<PixelLine>();
+
+        private static string writePath = @"\ath.txt";
 
         enum btnChanged
         {
@@ -52,13 +57,35 @@ namespace NIR_WPF
 
         public Histogram(BitmapImage image)
         {
-            InitializeComponent();
-            _redChannelData = new ObservableCollection<Point>();
-            UpdateImage(image);
+            if (image == null)
+            {
 
-            Plotter.AddLineChart(_redChannelData);
+                InitializeComponent();
+                OpenFileDialog dialog = new OpenFileDialog();
+                dialog.ShowDialog();
+                Uri uri = new Uri(dialog.FileName);
+                BitmapImage bitmap = new BitmapImage(uri);
+                testImage.Source = bitmap;
 
-            DataContext = this;
+                image = bitmap;
+
+                UpdateImage(image);
+
+                _redChannelData = new ObservableCollection<Point>();
+                Plotter.AddLineChart(_redChannelData);
+                DataContext = this;
+            }
+            else
+            {
+                InitializeComponent();
+                UpdateImage(image);
+
+                _redChannelData = new ObservableCollection<Point>();
+                Plotter.AddLineChart(_redChannelData);
+                DataContext = this;
+            }
+
+
         }
 
         public SeriesCollection SeriesCollection { get; set; }
@@ -71,6 +98,7 @@ namespace NIR_WPF
             _imageReader = new ImageReader(image.UriSource.LocalPath);
             testImage.Source = Image;
         }
+
 
         bool DrawingFigure = false;
 
@@ -93,8 +121,7 @@ namespace NIR_WPF
                 {
                     if (DrawingFigure)
                     {
-                        inkCanvas_MouseUp(sender,
-                            new MouseButtonEventArgs(e.MouseDevice, e.Timestamp, MouseButton.Left));
+                        inkCanvas_MouseUp(sender, new MouseButtonEventArgs(e.MouseDevice, e.Timestamp, MouseButton.Left));
                         DrawingFigure = false;
                     }
                 }
@@ -110,14 +137,14 @@ namespace NIR_WPF
             try
             {
                 PixelLine pixelRedChannelLine = new PixelLine(line, _imageReader.RedChannel);
-                PixelLine pixelBlueChannelLine = new PixelLine(line, _imageReader.BlueChannel);
-                PixelLine pixelGreenChannelLine = new PixelLine(line, _imageReader.GreenChannel);
+                //PixelLine pixelBlueChannelLine = new PixelLine(line, _imageReader.BlueChannel);
+                //PixelLine pixelGreenChannelLine = new PixelLine(line, _imageReader.GreenChannel);
 
                 _redChannelData.AddMany(pixelRedChannelLine.GetLine().Select(x => new Point(x.X, x.Value))); //todo
 
                 _redChannelLines.Add(pixelRedChannelLine);
-                _blueChannelLines.Add(pixelRedChannelLine);
-                _greenChannelLines.Add(pixelRedChannelLine);
+                //_blueChannelLines.Add(pixelRedChannelLine);
+                //_greenChannelLines.Add(pixelRedChannelLine);
             }
             catch (Exception ee)
             {
@@ -125,7 +152,7 @@ namespace NIR_WPF
             }
         }
 
-        private void DrawLine(Point start, Point stop, bool move)
+        public void DrawLine(Point start, Point stop, bool move)
         {
             try
             {
@@ -140,7 +167,8 @@ namespace NIR_WPF
                     inkCanvas.Children.Add(line);
                     AddLineToCollection(line);
                 }
-                else if (inkCanvas.Children.Count > 2 && !isMove)
+                else
+                if (inkCanvas.Children.Count > 2 && !isMove)
                 {
                     inkCanvas.Children.RemoveAt(inkCanvas.Children.Count - 1);
                     inkCanvas.Children.Add(line);
@@ -161,7 +189,11 @@ namespace NIR_WPF
         {
             try
             {
-                if (_redChannelData?.Count > 0) _redChannelData.Clear();
+                if (_redChannelData?.Count > 0)
+                {
+                    _redChannelData.Clear();
+                    this.inkCanvas.Strokes.Clear();
+                }
                 pN = new Point(e.GetPosition(e.Device.Target).X, e.GetPosition(e.Device.Target).Y);
                 Console.WriteLine(String.Format("Mouse Down Event at {0}", e.GetPosition(e.Device.Target)));
                 Console.WriteLine(Mouse.GetPosition(inkCanvas));
@@ -171,7 +203,6 @@ namespace NIR_WPF
             {
                 Console.WriteLine("{0} inkCanvas_MouseDown.", ee);
             }
-
         }
 
         private void inkCanvas_MouseUp(object sender, MouseButtonEventArgs e) //todo: fix
@@ -179,6 +210,7 @@ namespace NIR_WPF
             try
             {
                 pK = new Point(e.GetPosition(e.Device.Target).X, e.GetPosition(e.Device.Target).Y);
+
                 Console.WriteLine(String.Format("Mouse Up Event at {0}", e.GetPosition(e.Device.Target)));
                 Console.WriteLine(Mouse.GetPosition(inkCanvas));
                 if (btn == btnChanged.btnLine)
@@ -186,6 +218,10 @@ namespace NIR_WPF
                     DrawLine(pN, pK, false);
                     isMove = true;
                 }
+                //using (StreamWriter sw = new StreamWriter(writePath, false, System.Text.Encoding.Default))
+                //{
+                //    sw.WriteLine(e.GetPosition(e.Device.Target));
+                //}
             }
             catch (Exception ee)
             {
@@ -200,11 +236,8 @@ namespace NIR_WPF
 
         private void СlearThis(object sender, RoutedEventArgs e)
         {
-
-            this.inkCanvas.Strokes.Clear();
-
+            inkCanvas.Strokes.Clear();
         }
-
 
         private void SaveClick(object sender, RoutedEventArgs e)
         {
@@ -240,18 +273,39 @@ namespace NIR_WPF
             {
                 Console.WriteLine(exception);
             }
-
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void LoadPhoto(object sender, RoutedEventArgs e)
         {
-            this.inkCanvas.Strokes.Clear();
+            InitializeComponent();
+            OpenFileDialog dialog = new OpenFileDialog();
+            dialog.ShowDialog();
+            Uri uri = new Uri(dialog.FileName);
+            BitmapImage bitmap = new BitmapImage(uri);
+            testImage.Source = bitmap;
+
+            _image = bitmap;
+        }
+
+        private void SavDataClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+               
+            }
+
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception);
+            }
         }
 
         private void LineClick(object sender, RoutedEventArgs e)
         {
             btn = btnChanged.btnLine;
         }
+
+    
 
     }
 }

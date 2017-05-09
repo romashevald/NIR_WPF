@@ -6,6 +6,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Collections.Generic;
+using System.Drawing;
+using Microsoft.Win32;
+
 namespace NIR_WPF
 {
     /// <summary>
@@ -25,8 +28,6 @@ namespace NIR_WPF
         private BitmapImage _image;
         private List<System.Drawing.PointF> points = new List<System.Drawing.PointF>();
 
-        //  private List<PointF> _helperPoints = new List<PointF>();
-
         bool isMove = false;
 
         public BitmapImage Image
@@ -37,8 +38,24 @@ namespace NIR_WPF
 
         public KvaziLine(BitmapImage image)
         {
-            InitializeComponent();
-            UpdateImage(image);
+            if(image == null)
+            {
+
+                InitializeComponent();
+                OpenFileDialog dialog = new OpenFileDialog();
+                dialog.ShowDialog();
+                Uri uri = new Uri(dialog.FileName);
+                BitmapImage bitmap = new BitmapImage(uri);
+                testImage.Source = bitmap;
+
+                _image = bitmap;
+            }
+           
+            else
+            {
+                InitializeComponent();
+                UpdateImage(image);
+            }
 
         }
 
@@ -60,7 +77,7 @@ namespace NIR_WPF
             inkCanvas.EditingMode = InkCanvasEditingMode.EraseByPoint;
         }
 
-        private void inkCanvas_MouseDown(object sender, MouseButtonEventArgs e) //1
+        private void inkCanvas_MouseDown(object sender, MouseButtonEventArgs e) 
         {
 
             try
@@ -69,12 +86,22 @@ namespace NIR_WPF
                 {
                     points.Add(new System.Drawing.PointF((float)e.GetPosition(e.Device.Target).X, (float)e.GetPosition(e.Device.Target).Y));
                 }
+                else
+                {
+                    points.Clear();
+                    inkCanvas.Strokes.Clear();
+                }
+
                 if (points.Count == 3)
                 {
                     Console.WriteLine("All points have been set. Calc..");
                     Console.WriteLine(points);
-                    KvaziTools.GetParams(points);
+                    KvaziParams _params = KvaziTools.GetParams(points);
+                    
+                    DrawLines(points, _params);
+                    
                 }
+
             }
 
             catch (Exception ee)
@@ -83,66 +110,54 @@ namespace NIR_WPF
             }
         }
 
-        bool DrawingFigure = false;
-
-        private void inkCanvas_MouseUp(object sender, MouseButtonEventArgs e) //2
-        {
-            //try
-            //{
-            //    pK = new Point(e.GetPosition(e.Device.Target).X, e.GetPosition(e.Device.Target).Y);
-            //    _countPoints++;
-            //    Console.WriteLine(String.Format("Mouse Up Event at {0}", e.GetPosition(e.Device.Target)));
-            //    Console.WriteLine(Mouse.GetPosition(inkCanvas));
-
-            //    if (btn == btnChanged.btnLine)
-            //    {
-            //        DrawLine(pN, pK, false);
-            //        isMove = true;
-            //    }
-            //}
-            //catch (Exception ee)
-            //{
-            //    Console.WriteLine("{0} inkCanvas_MouseUp.", ee);
-            //}
-        }
-
-
-        private void inkCanvas_MouseMove(object sender, MouseEventArgs e) //3
+        private void DrawLines(List<PointF> points, KvaziParams _params)
         {
             try
             {
-                switch (btn)
-                {
-                    case btnChanged.btnPoint:
-                        Point p = Mouse.GetPosition(inkCanvas);
-                        break;
-                }
+                System.Windows.Point A = new System.Windows.Point(points[0].X, points[0].Y);
+                System.Windows.Point B = new System.Windows.Point(points[1].X, points[1].Y);
+                System.Windows.Point C = new System.Windows.Point(points[2].X, points[2].Y);
+                
+                DrawLine(A, B, true);
+                DrawLine(B, C, true);
+
+                System.Windows.Point centerAB = new System.Windows.Point(_params.D.X, _params.D.Y);
+                System.Windows.Point centerBC = new System.Windows.Point(_params.E.X, _params.E.Y);
+                System.Windows.Point center = new System.Windows.Point(_params.CircleCentr.X, _params.CircleCentr.Y);
+
+                DrawLine(centerAB, center, true);
+                DrawLine(centerBC, center, true);
+
+                DrawLine(A, center, true);
+                DrawLine(B, center, true);
+                DrawLine(C, center, true);
+
             }
 
             catch (Exception ee)
             {
-                Console.WriteLine("{0} inkCanvas_MouseUp.", ee);
+                Console.WriteLine("{0} DrawLine", ee);
             }
-
+            
         }
 
-        private void DrawLine(Point start, Point stop, bool move)
+
+        public void DrawLine(System.Windows.Point start, System.Windows.Point stop, bool move)
         {
             try
             {
                 Line line = new Line();
-                line.Stroke = Brushes.Red;
+                line.Stroke = System.Windows.Media.Brushes.Red;
                 line.X1 = start.X;
                 line.X2 = stop.X;
                 line.Y1 = start.Y;
                 line.Y2 = stop.Y;
-
-
                 if (!move)
                 {
                     inkCanvas.Children.Add(line);
                 }
-                else if (inkCanvas.Children.Count > 2 && !isMove)
+                else
+                if (inkCanvas.Children.Count > 10 && !isMove)
                 {
                     inkCanvas.Children.RemoveAt(inkCanvas.Children.Count - 1);
                     inkCanvas.Children.Add(line);
