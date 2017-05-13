@@ -73,6 +73,9 @@
       <HintPath>packages\DynamicDataDisplayWpf.0.4.0\lib\DynamicDataDisplay.Markers2.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Eto, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Eto.Forms.2.0.1\lib\net45\Eto.dll</HintPath>
+    </Reference>
     <Reference Include="LiveCharts, Version=0.9.5.0, Culture=neutral, PublicKeyToken=c5935629d38af058, processorArchitecture=MSIL">
       <HintPath>packages\LiveCharts.0.9.5\lib\net45\LiveCharts.dll</HintPath>
       <Private>True</Private>
@@ -99,6 +102,12 @@
     <Reference Include="Newtonsoft.Json, Version=3.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>packages\Newtonsoft.Json.3.5.8\lib\35\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="OxyPlot, Version=1.0.0.0, Culture=neutral, PublicKeyToken=638079a8f0bd61e9, processorArchitecture=MSIL">
+      <HintPath>packages\OxyPlot.Core.1.0.0\lib\net45\OxyPlot.dll</HintPath>
+    </Reference>
+    <Reference Include="OxyPlot.Wpf, Version=1.0.0.0, Culture=neutral, PublicKeyToken=75e952ba404cdbb0, processorArchitecture=MSIL">
+      <HintPath>packages\OxyPlot.Wpf.1.0.0\lib\net45\OxyPlot.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="Parser, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5b7d744a7263923f, processorArchitecture=MSIL">
       <HintPath>packages\DynamicDataDisplayWpf.0.4.0\lib\Parser.dll</HintPath>

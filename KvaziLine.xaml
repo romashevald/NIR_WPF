@@ -12,6 +12,8 @@
             <MenuItem Header="Actions" >
                 <MenuItem Header="Перо" Click="DrawClick"></MenuItem>
                 <MenuItem Header="Ластик" Click="EraseClick"></MenuItem>
+
+                <MenuItem Header="Сохранить область" Click="SaveClick"></MenuItem>
             </MenuItem>
         </Menu>
         <InkCanvas x:Name="inkCanvas" 

@@ -17,8 +17,9 @@ using Microsoft.Research.DynamicDataDisplay.DataSources;
 using System.Collections.ObjectModel;
 using System.IO;
 using Microsoft.Win32;
-
-
+using OxyPlot;
+using OxyPlot.Series;
+using OxyPlot.Wpf;
 
 namespace NIR_WPF
 {
@@ -34,6 +35,8 @@ namespace NIR_WPF
         private List<PixelLine> _redChannelLines = new List<PixelLine>();
         private List<PixelLine> _blueChannelLines = new List<PixelLine>();
         private List<PixelLine> _greenChannelLines = new List<PixelLine>();
+
+        public IList<DataPoint> Points { get; set; }
 
         private static string writePath = @"\ath.txt";
 
@@ -57,9 +60,17 @@ namespace NIR_WPF
 
         public Histogram(BitmapImage image)
         {
+            this.Points = new List<DataPoint>
+                              {
+                                  new DataPoint(0, 4),
+                                  new DataPoint(10, 13),
+                                  new DataPoint(20, 15),
+                                  new DataPoint(30, 16),
+                                  new DataPoint(40, 12),
+                                  new DataPoint(50, 12)
+                              };
             if (image == null)
             {
-
                 InitializeComponent();
                 OpenFileDialog dialog = new OpenFileDialog();
                 dialog.ShowDialog();
@@ -72,7 +83,7 @@ namespace NIR_WPF
                 UpdateImage(image);
 
                 _redChannelData = new ObservableCollection<Point>();
-                Plotter.AddLineChart(_redChannelData);
+                //Plotter.AddLineChart(_redChannelData);
                 DataContext = this;
             }
             else
@@ -80,12 +91,15 @@ namespace NIR_WPF
                 InitializeComponent();
                 UpdateImage(image);
 
-                _redChannelData = new ObservableCollection<Point>();
-                Plotter.AddLineChart(_redChannelData);
+                //Plot.Model = new OxyPlot.PlotModel { Title = "Example 1" };
+                //var series = new LineSeries();
+                //series.Points.Add(new DataPoint(1, 2));
+                //series.Points.Add(new DataPoint(10, 20));
+            
+                //Plotter.AddLineChart(_redChannelData);
                 DataContext = this;
             }
-
-
+            
         }
 
         public SeriesCollection SeriesCollection { get; set; }
@@ -98,8 +112,7 @@ namespace NIR_WPF
             _imageReader = new ImageReader(image.UriSource.LocalPath);
             testImage.Source = Image;
         }
-
-
+        
         bool DrawingFigure = false;
 
         private void inkCanvas_MouseMove(object sender, MouseEventArgs e)
@@ -139,10 +152,15 @@ namespace NIR_WPF
                 PixelLine pixelRedChannelLine = new PixelLine(line, _imageReader.RedChannel);
                 //PixelLine pixelBlueChannelLine = new PixelLine(line, _imageReader.BlueChannel);
                 //PixelLine pixelGreenChannelLine = new PixelLine(line, _imageReader.GreenChannel);
-
-                _redChannelData.AddMany(pixelRedChannelLine.GetLine().Select(x => new Point(x.X, x.Value))); //todo
-
-                _redChannelLines.Add(pixelRedChannelLine);
+                
+                this.Points = new List<DataPoint> (pixelRedChannelLine.GetLine().Select(x => new DataPoint(x.X, x.Value))); //todo
+                this.plot.Series[0].ItemsSource = this.Points;
+                //this.plot.InvalidateArrange();
+                //this.plot.InvalidatePlot(true);
+               
+                //Console.WriteLine("Data context is " + this.MyPlot.DataContext);
+                Console.WriteLine(this.Points);
+                //_redChannelLines.Add(pixelRedChannelLine);
                 //_blueChannelLines.Add(pixelRedChannelLine);
                 //_greenChannelLines.Add(pixelRedChannelLine);
             }
@@ -218,10 +236,6 @@ namespace NIR_WPF
                     DrawLine(pN, pK, false);
                     isMove = true;
                 }
-                //using (StreamWriter sw = new StreamWriter(writePath, false, System.Text.Encoding.Default))
-                //{
-                //    sw.WriteLine(e.GetPosition(e.Device.Target));
-                //}
             }
             catch (Exception ee)
             {
@@ -259,15 +273,8 @@ namespace NIR_WPF
         {
             try
             {
-                RenderTargetBitmap renderTargetBitmap =
-                    new RenderTargetBitmap((int)this.Plotter.Width, (int)this.Plotter.Height, 0, 0, PixelFormats.Pbgra32);
-                renderTargetBitmap.Render(this.Plotter);
-                PngBitmapEncoder pngImage = new PngBitmapEncoder();
-                pngImage.Frames.Add(BitmapFrame.Create(renderTargetBitmap));
-                using (Stream fileStream = File.Create(@"D:\test1.bmp"))
-                {
-                    pngImage.Save(fileStream);
-                }
+                this.plot.SaveBitmap(@"C:\Users\Nickolay\screen.bmp");
+             
             }
             catch (Exception exception)
             {

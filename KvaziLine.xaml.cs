@@ -8,6 +8,7 @@ using System.Windows.Shapes;
 using System.Collections.Generic;
 using System.Drawing;
 using Microsoft.Win32;
+using System.IO;
 
 namespace NIR_WPF
 {
@@ -171,6 +172,22 @@ namespace NIR_WPF
             catch (Exception ee)
             {
                 Console.WriteLine("{0} DrawLine", ee);
+            }
+        }
+
+        private void SaveClick(object sender, RoutedEventArgs e)
+        {
+            Console.WriteLine(e);
+            int marg = int.Parse(this.inkCanvas.Margin.Left.ToString());
+            RenderTargetBitmap renderTargetBitmap =
+                new RenderTargetBitmap((int)this.inkCanvas.ActualWidth - marg,
+                    (int)this.inkCanvas.ActualHeight - marg, 0, 0, PixelFormats.Pbgra32);
+            renderTargetBitmap.Render(this.inkCanvas);
+            PngBitmapEncoder pngImage = new PngBitmapEncoder();
+            pngImage.Frames.Add(BitmapFrame.Create(renderTargetBitmap));
+            using (Stream fileStream = File.Create(@"C:\Users\Nickolay\kvazi.bmp"))
+            {
+                pngImage.Save(fileStream);
             }
         }
     }

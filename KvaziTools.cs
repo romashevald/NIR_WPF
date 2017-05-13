@@ -43,8 +43,7 @@ namespace NIR_WPF
             kvaziParams.E = E;
             return kvaziParams;
         }
-
-       
+        
         public static float GetLengthLine(PointF first, PointF second)
         {
             return (float)Math.Sqrt((first.X - second.X) * (first.X - second.X) + (first.Y - second.Y) * (first.Y - second.Y));
