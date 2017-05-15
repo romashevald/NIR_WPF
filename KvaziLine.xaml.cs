@@ -185,11 +185,10 @@ namespace NIR_WPF
             renderTargetBitmap.Render(this.inkCanvas);
             PngBitmapEncoder pngImage = new PngBitmapEncoder();
             pngImage.Frames.Add(BitmapFrame.Create(renderTargetBitmap));
-            //using (Stream fileStream = File.Create(@"C:\Users\rld\kvazi.bmp"))
-            //{
-            //    pngImage.Save(fileStream);
-            //    Clipboard.SetImage.
-            //}
+            using (Stream fileStream = File.Create(@"C:\nir\практика\kvazi.bmp"))
+            {
+                pngImage.Save(fileStream);
+            }
         }
     }
 }
