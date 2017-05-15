@@ -215,6 +215,7 @@ namespace NIR_WPF
                 pN = new Point(e.GetPosition(e.Device.Target).X, e.GetPosition(e.Device.Target).Y);
                 Console.WriteLine(String.Format("Mouse Down Event at {0}", e.GetPosition(e.Device.Target)));
                 Console.WriteLine(Mouse.GetPosition(inkCanvas));
+            
             }
 
             catch (Exception ee)
@@ -298,7 +299,7 @@ namespace NIR_WPF
         {
             try
             {
-               
+                
             }
 
             catch (Exception exception)
